@@ -1,0 +1,23 @@
+@font-face {
+    font-family: "signikaR";
+    src: url(../fonts/signika/Signika-Regular.ttf)  format("truetype");
+    font-weight:normal;
+}
+
+@font-face {
+    font-family: "signikaSB";
+    src: url(../fonts/signika/Signika-Semibold.ttf)  format("truetype");
+    font-weight:bold;
+}
+
+@font-face {
+    font-family: "signikaB";
+    src: url(../fonts/signika/Signika-Bold.ttf)  format("truetype");
+    font-weight:bold;
+}
+
+@font-face {
+    font-family: "signikaL";
+    src: url(../fonts/signika/Signika-Light.ttf)  format("truetype");
+    font-weight:auto;
+}
