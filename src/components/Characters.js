@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { CharacterContext } from "../context/characterContaxt";
 import styled from "@emotion/styled";
 import { sizing } from "../styles/sizing";
 import { fontSizing } from "../styles/fontSizing";
 import { SelectedCharacterContext } from "../context/selectedCharacterContext";
 
 const Container = styled.div({
-  height: "70vh",
+  height: "200vh",
   margin: "0 auto",
   maxWidth: "1080px",
 });
@@ -15,7 +14,7 @@ const CardContainer = styled.div({
   margin: "0",
   display: "flex",
   flexFlow: "column wrap",
-  height: "60%",
+  height: "45%",
   overflowX: "scroll",
   msOverflowStyle: "none",
   "::-webkit-scrollbar": {
@@ -33,6 +32,12 @@ const Card = styled.div({
   ":active": {
     boxShadow: "inset 0px 0px 5px rgba(0,0,0,.5)",
   },
+});
+
+const Name = styled.div({
+  ...fontSizing.xl,
+  textAlign: "center",
+  fontFamily: "signikaL",
 });
 
 const TextContainer = styled.div({
@@ -72,31 +77,30 @@ const sortOptions = {
   rank: "rank",
 };
 
-export const Characters = ({ updateCharacters, updateSelectedCharacter }) => {
-  const characters = useContext(CharacterContext);
+export const Characters = ({ updateSelectedCharacter }) => {
+  const [characters, setCharacters] = useState([]);
   const [sortBy, setSortBy] = useState(sortOptions.name);
   const selectedCharacters = useContext(SelectedCharacterContext);
 
   const sort = (d) => {
-    let tempArray = d;
+    let tempArray = [...d];
     tempArray.sort((a, b) =>
       a[sortBy] > b[sortBy] ? 1 : b[sortBy] > a[sortBy] ? -1 : 0
     );
     return tempArray;
   };
-  useEffect(() => {
-    updateCharacters(sort(characters));
-  }, [sortBy, sort]);
 
   useEffect(() => {
-    if (characters.length === 0) {
-      fetch("http://localhost:4001/characters")
-        .then((res) => res.json())
-        .then((data) => {
-          updateCharacters(sort(data.rows));
-        });
-    }
-  }, [characters, updateCharacters]);
+    fetch("http://localhost:80/characters")
+      .then((res) => res.json())
+      .then((data) => {
+        setCharacters(sort(data.rows));
+      });
+  }, []);
+
+  useEffect(() => {
+    setCharacters((c) => sort(c));
+  }, [sortBy]);
 
   return (
     <Container>
@@ -125,21 +129,21 @@ export const Characters = ({ updateCharacters, updateSelectedCharacter }) => {
             onClick={() => updateSelectedCharacter(character, "add")}
           >
             <img src={character.avatarurl} alt={character.name} />
-            <p>{character.name}</p>
+            <Name>{character.name}</Name>
           </Card>
         ))}
       </CardContainer>
-      {/*<CardContainer>*/}
-      {/*  {selectedCharacters.map((character) => (*/}
-      {/*    <Card*/}
-      {/*      key={character.id}*/}
-      {/*      onClick={updateSelectedCharacter(character, "add")}*/}
-      {/*    >*/}
-      {/*      <img src={character.avatarurl} alt={character.name} />*/}
-      {/*      <p>{character.name}</p>*/}
-      {/*    </Card>*/}
-      {/*  ))}*/}
-      {/*</CardContainer>*/}
+      <CardContainer>
+        {selectedCharacters.map((character) => (
+          <Card
+            key={character.id}
+            onClick={() => updateSelectedCharacter(character, "delete")}
+          >
+            <img src={character.avatarurl} alt={character.name} />
+            <Name>{character.name}</Name>
+          </Card>
+        ))}
+      </CardContainer>
     </Container>
   );
 };

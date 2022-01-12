@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import image from "./assets/backgroundScaled.jpg";
-import { CharacterProvider } from "./context/characterContaxt";
 import { SelectedCharacterProvider } from "./context/selectedCharacterContext";
 import { Characters } from "./components/Characters";
 import { Welcome } from "./components/Welcome";
@@ -16,32 +15,29 @@ const Background = styled.div({
 });
 
 function App() {
-  const [characters, setCharacters] = useState([]);
   const [selectedCharacter, setSelectedCharacter] = useState([]);
 
-  const updateCharacters = (c) => {
-    setCharacters(c);
-  };
   const updateSelectedCharacters = (c, action) => {
-    if (action === "add") {
-      setSelectedCharacter((a) => [...a, c]);
+    let tempArray = [...selectedCharacter];
+    if (action === "add" && !tempArray.some((character) => character === c)) {
+      tempArray.push(c);
+      setSelectedCharacter(tempArray);
+    }
+
+    if (action === "delete") {
+      setSelectedCharacter(tempArray.filter((character) => character !== c));
     }
     console.log(selectedCharacter);
   };
 
   return (
-    <CharacterProvider value={characters}>
-      <SelectedCharacterProvider value={selectedCharacter}>
-        <Background>
-          <Welcome />
-          <Characters
-            updateCharacters={updateCharacters}
-            updateSelectedCharacter={updateSelectedCharacters}
-          />
-          <Selection />
-        </Background>
-      </SelectedCharacterProvider>
-    </CharacterProvider>
+    <SelectedCharacterProvider value={selectedCharacter}>
+      <Background>
+        <Welcome />
+        <Characters updateSelectedCharacter={updateSelectedCharacters} />
+        <Selection />
+      </Background>
+    </SelectedCharacterProvider>
   );
 }
 
