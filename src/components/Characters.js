@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { sizing } from "../styles/sizing";
 import { fontSizing } from "../styles/fontSizing";
-import { SelectedCharacterContext } from "../context/selectedCharacterContext";
 
 const Container = styled.div({
-  height: "200vh",
+  height: "50vh",
   margin: "0 auto",
   maxWidth: "1080px",
 });
@@ -14,7 +13,7 @@ const CardContainer = styled.div({
   margin: "0",
   display: "flex",
   flexFlow: "column wrap",
-  height: "45%",
+  height: "40%",
   overflowX: "scroll",
   msOverflowStyle: "none",
   "::-webkit-scrollbar": {
@@ -80,7 +79,6 @@ const sortOptions = {
 export const Characters = ({ updateSelectedCharacter }) => {
   const [characters, setCharacters] = useState([]);
   const [sortBy, setSortBy] = useState(sortOptions.name);
-  const selectedCharacters = useContext(SelectedCharacterContext);
 
   const sort = (d) => {
     let tempArray = [...d];
@@ -126,18 +124,7 @@ export const Characters = ({ updateSelectedCharacter }) => {
         {characters.map((character) => (
           <Card
             key={character.id}
-            onClick={() => updateSelectedCharacter(character, "add")}
-          >
-            <img src={character.avatarurl} alt={character.name} />
-            <Name>{character.name}</Name>
-          </Card>
-        ))}
-      </CardContainer>
-      <CardContainer>
-        {selectedCharacters.map((character) => (
-          <Card
-            key={character.id}
-            onClick={() => updateSelectedCharacter(character, "delete")}
+            onClick={() => updateSelectedCharacter("add", character)}
           >
             <img src={character.avatarurl} alt={character.name} />
             <Name>{character.name}</Name>

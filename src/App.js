@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import styled from "@emotion/styled";
 import image from "./assets/backgroundScaled.jpg";
 import { SelectedCharacterProvider } from "./context/selectedCharacterContext";
@@ -17,7 +18,8 @@ const Background = styled.div({
 function App() {
   const [selectedCharacter, setSelectedCharacter] = useState([]);
 
-  const updateSelectedCharacters = (c, action) => {
+  const updateSelectedCharacters = (action, c) => {
+    c = c ?? [];
     let tempArray = [...selectedCharacter];
     if (action === "add" && !tempArray.some((character) => character === c)) {
       tempArray.push(c);
@@ -27,6 +29,9 @@ function App() {
     if (action === "delete") {
       setSelectedCharacter(tempArray.filter((character) => character !== c));
     }
+    if (action === "deleteAll") {
+      setSelectedCharacter(c);
+    }
     console.log(selectedCharacter);
   };
 
@@ -35,7 +40,7 @@ function App() {
       <Background>
         <Welcome />
         <Characters updateSelectedCharacter={updateSelectedCharacters} />
-        <Selection />
+        <Selection updateSelectedCharacter={updateSelectedCharacters} />
       </Background>
     </SelectedCharacterProvider>
   );
