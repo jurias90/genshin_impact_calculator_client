@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import styled from "@emotion/styled";
 import image from "./assets/backgroundScaled.jpg";
 import { SelectedCharacterProvider } from "./context/selectedCharacterContext";
