@@ -75,15 +75,17 @@ export const Selection = ({ updateSelectedCharacter }) => {
   const fetchMaterials = () => {
     if (selectedCharacters.length === 0) return;
     let ids = selectedCharacters.map((char) => char.id);
-    console.log(ids);
     fetch("http://localhost:80/characters/ascensions", {
-      body: JSON.stringify({ ids }),
       method: "POST",
+      body: JSON.stringify({ ids }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => res.json())
       .then((data) => {
         setMaterials(data.rows);
-        console.log(data.rows);
       });
   };
 

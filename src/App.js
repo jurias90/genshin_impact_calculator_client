@@ -31,7 +31,6 @@ function App() {
     if (action === "deleteAll") {
       setSelectedCharacter(c);
     }
-    console.log(selectedCharacter);
   };
 
   return (
