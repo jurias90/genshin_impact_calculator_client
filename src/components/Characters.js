@@ -92,7 +92,7 @@ export const Characters = ({ updateSelectedCharacter }) => {
     fetch("http://localhost:80/characters")
       .then((res) => res.json())
       .then((data) => {
-        setCharacters(sort(data.rows));
+        setCharacters(sort(data.data));
       });
   }, []);
 

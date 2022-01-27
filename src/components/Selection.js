@@ -70,7 +70,8 @@ const GetButton = styled.button({
 
 export const Selection = ({ updateSelectedCharacter }) => {
   const selectedCharacters = useContext(SelectedCharacterContext);
-  const [materials, setMaterials] = useState([]);
+  const [materials, setMaterials] = useState({});
+  const [totalMats, setTotalMats] = useState({});
 
   const fetchMaterials = () => {
     if (selectedCharacters.length === 0) return;
@@ -85,8 +86,28 @@ export const Selection = ({ updateSelectedCharacter }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setMaterials(data.rows);
+        totalMaterials(data.data);
+        setMaterials(data.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
+  };
+
+  const totalMaterials = (data) => {
+    let total = {};
+    Object.keys(data).forEach((character) => {
+      data[character].forEach((level) => {
+        Object.keys(level.materials).forEach((material) => {
+          if (material in total) {
+            total[material] += parseInt(level.materials[material]);
+            return;
+          }
+          total[material] = parseInt(level.materials[material]);
+        });
+      });
+    });
+    setTotalMats(total);
   };
 
   return (
@@ -119,7 +140,16 @@ export const Selection = ({ updateSelectedCharacter }) => {
           Delete All From List
         </GetButton>
       </Buttons>
-      {materials.length === 0 ? null : <>Hello darkness my old friend!</>}
+      {!materials || !totalMats ? null : (
+        <>
+          <h3>Totals</h3>
+          {Object.keys(totalMats).map((material) => (
+            <div key={material}>
+              <p>{`${material} : ${totalMats[material]}`} </p>
+            </div>
+          ))}
+        </>
+      )}
     </Container>
   );
 };
