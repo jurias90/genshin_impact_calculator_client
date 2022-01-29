@@ -59,7 +59,7 @@ const SortOptions = styled.div({
 });
 const Option = styled.p({
   marginRight: "5px",
-  ":not(:first-child)": {
+  ":not(:first-of-type)": {
     margin: "0 5px",
   },
   fontFamily: "signikaSB",

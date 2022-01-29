@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { SelectedCharacterContext } from "../context/selectedCharacterContext";
 
 const Container = styled.div({
-  height: "50vh",
+  height: "100vh",
   margin: "0 auto",
   maxWidth: "1080px",
 });
@@ -14,7 +14,7 @@ const CardContainer = styled.div({
   margin: "0",
   display: "flex",
   flexFlow: "column wrap",
-  height: "40%",
+  height: "25%",
   overflowX: "scroll",
   msOverflowStyle: "none",
   "::-webkit-scrollbar": {
@@ -66,6 +66,34 @@ const GetButton = styled.button({
     boxShadow: "inset 0px 0px 5px rgba(0,0,0,.5)",
   },
   marginRight: sizing[3],
+});
+
+const ItemContainer = styled.div({
+  margin: "0",
+  display: "flex",
+  flexFlow: "column wrap",
+  height: "50%",
+  overflowX: "scroll",
+  msOverflowStyle: "none",
+  "::-webkit-scrollbar": {
+    display: "none",
+  },
+});
+
+const Item = styled.div({
+  border: "1px solid black",
+  width: sizing["56"],
+  height: sizing["16"],
+  margin: sizing["3"],
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "#EBF3FF",
+});
+
+const ItemDescription = styled.p({
+  ...fontSizing.lg,
+  fontFamily: "signikaL",
 });
 
 export const Selection = ({ updateSelectedCharacter }) => {
@@ -140,14 +168,19 @@ export const Selection = ({ updateSelectedCharacter }) => {
           Delete All From List
         </GetButton>
       </Buttons>
-      {!materials || !totalMats ? null : (
+      {Object.keys(materials).length === 0 ||
+      Object.keys(totalMats).length === 0 ? null : (
         <>
-          <h3>Totals</h3>
-          {Object.keys(totalMats).map((material) => (
-            <div key={material}>
-              <p>{`${material} : ${totalMats[material]}`} </p>
-            </div>
-          ))}
+          <Description>Totals</Description>
+          <ItemContainer>
+            {Object.keys(totalMats).map((material) => (
+              <Item key={material}>
+                <ItemDescription>
+                  {`${material} : ${totalMats[material]}`}{" "}
+                </ItemDescription>
+              </Item>
+            ))}
+          </ItemContainer>
         </>
       )}
     </Container>
