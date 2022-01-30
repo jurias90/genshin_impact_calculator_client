@@ -89,7 +89,7 @@ export const Characters = ({ updateSelectedCharacter }) => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:80/characters")
+    fetch("https://genshin-impact-calculator.herokuapp.com/characters")
       .then((res) => res.json())
       .then((data) => {
         setCharacters(sort(data.data));

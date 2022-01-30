@@ -104,14 +104,17 @@ export const Selection = ({ updateSelectedCharacter }) => {
   const fetchMaterials = () => {
     if (selectedCharacters.length === 0) return;
     let ids = selectedCharacters.map((char) => char.id);
-    fetch("http://localhost:80/characters/ascensions", {
-      method: "POST",
-      body: JSON.stringify({ ids }),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      "https://genshin-impact-calculator.herokuapp.com/characters/ascensions",
+      {
+        method: "POST",
+        body: JSON.stringify({ ids }),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         totalMaterials(data.data);
@@ -140,47 +143,51 @@ export const Selection = ({ updateSelectedCharacter }) => {
 
   return (
     <Container>
-      <TextContainer>
-        <Description>Selected Characters:</Description>
-      </TextContainer>
-      <CardContainer>
-        {selectedCharacters.map((character) => (
-          <Card
-            key={character.id}
-            onClick={() => updateSelectedCharacter("delete", character)}
-          >
-            <img src={character.avatarurl} alt={character.name} />
-            <Name>{character.name}</Name>
-          </Card>
-        ))}
-      </CardContainer>
-      <Buttons>
-        <GetButton
-          disabled={selectedCharacters.length === 0}
-          onClick={() => fetchMaterials()}
-        >
-          Get Materials!
-        </GetButton>
-        <GetButton
-          onClick={() => updateSelectedCharacter("deleteAll")}
-          disabled={selectedCharacters.length === 0}
-        >
-          Delete All From List
-        </GetButton>
-      </Buttons>
-      {Object.keys(materials).length === 0 ||
-      Object.keys(totalMats).length === 0 ? null : (
+      {selectedCharacters.length === 0 ? null : (
         <>
-          <Description>Totals</Description>
-          <ItemContainer>
-            {Object.keys(totalMats).map((material) => (
-              <Item key={material}>
-                <ItemDescription>
-                  {`${material} : ${totalMats[material]}`}{" "}
-                </ItemDescription>
-              </Item>
+          <TextContainer>
+            <Description>Selected Characters:</Description>
+          </TextContainer>
+          <CardContainer>
+            {selectedCharacters.map((character) => (
+              <Card
+                key={character.id}
+                onClick={() => updateSelectedCharacter("delete", character)}
+              >
+                <img src={character.avatarurl} alt={character.name} />
+                <Name>{character.name}</Name>
+              </Card>
             ))}
-          </ItemContainer>
+          </CardContainer>
+          <Buttons>
+            <GetButton
+              disabled={selectedCharacters.length === 0}
+              onClick={() => fetchMaterials()}
+            >
+              Get Materials!
+            </GetButton>
+            <GetButton
+              onClick={() => updateSelectedCharacter("deleteAll")}
+              disabled={selectedCharacters.length === 0}
+            >
+              Delete All From List
+            </GetButton>
+          </Buttons>
+          {Object.keys(materials).length === 0 ||
+          Object.keys(totalMats).length === 0 ? null : (
+            <>
+              <Description>Totals</Description>
+              <ItemContainer>
+                {Object.keys(totalMats).map((material) => (
+                  <Item key={material}>
+                    <ItemDescription>
+                      {`${material} : ${totalMats[material]}`}{" "}
+                    </ItemDescription>
+                  </Item>
+                ))}
+              </ItemContainer>
+            </>
+          )}
         </>
       )}
     </Container>
